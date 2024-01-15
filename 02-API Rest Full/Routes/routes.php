@@ -15,26 +15,48 @@ if(count(array_filter($arrayRoutes))==2){
      * Cuando hacemos alguna petición a la API
      */
     if(count(array_filter($arrayRoutes))==3){
-        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=="POST"){
+        /**
+        * Cuando se hace una petición de tipo cursos
+        */
+        if(array_filter($arrayRoutes)[3]=="cursos"){
             /**
-            * Cuando se hace una petición de tipo cursos
-            */
-            if(array_filter($arrayRoutes)[3]=="cursos"){
+             * Peticiones de tipo POST para añadir cursos
+             */
+            if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=="POST"){
+                /**
+                 * Capturamos los datos para añadirlos a la base de datos
+                 */
+                $data = array(
+                    "titulo" => $_POST["title"],
+                    "descripcion" => $_POST["description"],
+                    "instructor" => $_POST["instructor"],
+                    "titulo" => $_POST["title"],
+                    "titulo" => $_POST["title"],
+                )
                 $courses = new coursesControler();
                 $courses->create();
-            }elseif(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=="GET"){
+            }
+            /**
+             * Peticiones de tipo GET para consultar los cursos
+             */
+            elseif(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=="GET"){
                 $courses = new coursesControler();
                 $courses->index();
             }
             
         }
-        if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=="GET") {
-            /**
-            * Cuando se hace una petición de tipo registro
-            */
-            if(array_filter($arrayRoutes)[3]=="registro"){
+        /**
+        * Cuando se hace una petición de tipo registro
+        */
+        if(array_filter($arrayRoutes)[3]=="registro") {
+            if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=="POST"){
+                $data=array(
+                    "nombre" => $_POST["nombre"],
+                    "apellido" => $_POST["apellido"],
+                    "email" => $_POST["email"]
+                );
                 $register = new registerControler();
-                $register->index();
+                $register->create($data);
             }
         }
         
