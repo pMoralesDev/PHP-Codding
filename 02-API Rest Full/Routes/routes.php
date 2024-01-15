@@ -32,7 +32,7 @@ if(count(array_filter($arrayRoutes))==2){
                     "instructor" => $_POST["instructor"],
                     "titulo" => $_POST["title"],
                     "titulo" => $_POST["title"],
-                )
+                );
                 $courses = new coursesControler();
                 $courses->create();
             }
