@@ -85,19 +85,19 @@ if(isset($_POST["convert"])){
     <title>#1.- Length Converter</title>
 </head>
 <body>
-    <h1>Legth Converter</h1>
     <div class="container">
+        <h1>Length Converter</h1>
         <form method="POST">
-            <div class="row mt-4">
+            <div class="row">
 
-                <div class="col-sm-4">
+                <div class="col">
                     <div>
                         <label for="value" class="form-label">Value:</label>
                         <input type="number" name="value" class="form-control" value="">
                     </div>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col">
                     <label for="from" class="form-label">From:</label>
                     <select name="from" class="form-select">
                         <option value="">--Select a measurement unit--</option>
@@ -111,7 +111,7 @@ if(isset($_POST["convert"])){
                     </select>
                 </div>
 
-                <div class="col-sm-4">
+                <div class="col">
                     <label for="to" class="form-label">To:</label>
                     <select name="to" class="form-select">
                         <option value="">--Select a measurement unit--</option>
@@ -126,14 +126,14 @@ if(isset($_POST["convert"])){
                 </div>
             </div>
 
-            <div class="row mt-4">
+            <div class="row">
 
-                <div class="col-sm-6">
-                    <button type="submit" name="convert" class="btn btn-primary w-100 py-4">Convert</button>
+                <div class="col">
+                    <button type="submit" name="convert" class="btn">Convert</button>
                 </div>
 
-                <div class="col-sm-6">
-                    <div class="mb-3">
+                <div class="col">
+                    <div class="mb">
                         <label for="result" class="form-label">Result:</label>
                         <input type="text" name="result" class="form-control" value="<?php if(isset($result)) echo $result; ?>">
                     </div>
