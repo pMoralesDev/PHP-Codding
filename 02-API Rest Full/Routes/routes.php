@@ -27,14 +27,14 @@ if(count(array_filter($arrayRoutes))==2){
                  * Capturamos los datos para añadirlos a la base de datos
                  */
                 $data = array(
-                    "titulo" => $_POST["title"],
-                    "descripcion" => $_POST["description"],
+                    "titulo" => $_POST["titulo"],
+                    "descripcion" => $_POST["descripcion"],
                     "instructor" => $_POST["instructor"],
-                    "titulo" => $_POST["title"],
-                    "titulo" => $_POST["title"],
+                    "imagen" => $_POST["imagen"],
+                    "precio" => $_POST["precio"],
                 );
                 $courses = new coursesControler();
-                $courses->create();
+                $courses->create($data);
             }
             /**
              * Peticiones de tipo GET para consultar los cursos
