@@ -1,6 +1,6 @@
 <?php
 class coursesControler{
-    public function index(){
+    public function index($page){
         /**
          * Validamos las credenciales del cliente
          */
@@ -11,12 +11,21 @@ class coursesControler{
                  * Usamos la funcione base64_encode para hacer los datos más largos y difucultar los accesos no permitidos
                  */
                 if(base64_encode($_SERVER['PHP_AUTH_USER'].':'.$_SERVER['PHP_AUTH_PW']) == base64_encode($value["id_cliente"].':'.$value["llave_secreta"])){
-                    $courses=courseModel::index("cursos");
-                    $json=array(
-                    "detail"=>$courses 
-                    );
-                    echo json_encode($json,true);
-                    return;
+                    if($page==null){
+                        $courses=courseModel::index("cursos", "clientes", null, null);
+                        $json=array(
+                            "status"=>200,
+                            "total_registros"=>count($courses),
+                            "detail"=>$courses 
+                        );
+                        echo json_encode($json,true);
+                        return;
+                    } else {
+                        $amount = 10;
+                        $from = ($page-1)*$amount;
+                        $courses=courseModel::index("cursos", "clientes",$amount, $from);
+                    }
+                   
                 }
             }
         }
@@ -48,7 +57,7 @@ class coursesControler{
                     /**
                      * Comprobamos que los datos no están ya registrados
                      */
-                    $courses = coursesModel::index("cursos");
+                    $courses = coursesModel::index("cursos", "clientes", null, null);
                     foreach($courses as $key => $valueCourses) {
                         if($valueCourses->titulo == $data["titulo"]){
 							$json = array(
@@ -158,7 +167,7 @@ class coursesControler{
                     /**
                      * Validamos que el usuario que esta modificando los datos tiene permiso para modificar los datos
                      */
-                    $course=courseModel::show("cursos",$id);
+                    $course=courseModel::show("cursos", "clientes", $id);
                     foreach($course as $key => $valueCourse) {
                         if($valueCourse -> id_creador == $valueCliente['id']){
                             /**
@@ -195,11 +204,42 @@ class coursesControler{
         }
     }
     public function delete($id){
-        $json=array(
-            "detail"=>"delete course => ".$id
-        );
-        echo json_encode($json,true);
-        return;
+        /**Validamos las credenciales del cliente */
+        $register = registerModel::index("clientes");
+        if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])){
+            foreach($register as $key => $value){
+                /**
+                 * Usamos la funcione base64_encode para hacer los datos más largos y difucultar los accesos no permitidos
+                 */
+                if(base64_encode($_SERVER['PHP_AUTH_USER'].':'.$_SERVER['PHP_AUTH_PW']) == base64_encode($value["id_cliente"].':'.$value["llave_secreta"])){
+                       /**
+                     * Validamos que el usuario que esta modificando los datos tiene permiso para modificar los datos
+                     */
+                    $course=courseModel::show("cursos", "clientes", $id);
+                    foreach($course as $key => $valueCourse) {
+                        if($valueCourse -> id_creador == $valueCliente['id']){
+                            /**Exportamos los datos al modelo */
+                            $delete = courseModel::delete("cursos", $id);
+                            if($delete=='ok'){
+                                $json = array(
+                                    "status"=>200,
+                                    "detail"=>"The Course's been deleted properly"
+                                );
+                                echo json_encode($json, true);
+                                return;
+                            } else {
+                                $json = array(
+                                    "status"=>404,
+                                    "detalle"=>"The user isn't authorized to update the course"
+                                );
+                                echo json_encode($json, true);
+                                return;
+                            }
+                        }
+                    }                 
+                }
+            }
+        }
     }
 }
 ?>
