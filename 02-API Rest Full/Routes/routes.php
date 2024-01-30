@@ -74,8 +74,13 @@ if(count(array_filter($arrayRoutes))==2){
              * Peticiones put
              */
             if(isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD']=="PUT"){
+                /**
+                 * Capturamos los datos para actualizar el curso
+                 */
+                $datas = array();
+                parse_str(file_get_contents('php://input'), $datas);
                 $updateCourses = new coursesControler();
-                $updateCourses->show(array_filter($arrayRoutes)[4]);
+                $updateCourses->update(array_filter($arrayRoutes)[4]);
             }
             /**
              * Peticiones DELETE
